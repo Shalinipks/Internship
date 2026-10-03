@@ -1,0 +1,1563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FinResilient AI — Financial Behaviour & Resilience</title>
+
+<style>
+:root{
+--bg:#f5f7fb;
+--card:#fff;
+--text:#172033;
+--muted:#687386;
+--primary:#3157d5;
+--primary2:#6d5dfc;
+--good:#159570;
+--warn:#e98a22;
+--danger:#d94a5f;
+--border:#e4e8f0
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+font-family:Inter,Segoe UI,Arial,sans-serif;
+background:var(--bg);
+color:var(--text)
+}
+
+header{
+background:linear-gradient(135deg,#172554,#3157d5);
+color:#fff;
+padding:24px 5%;
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:20px
+}
+
+.brand{font-size:25px;font-weight:800}
+.brand span{
+font-weight:400;
+opacity:.8;
+font-size:14px;
+display:block;
+margin-top:4px
+}
+
+.badge{
+background:rgba(255,255,255,.14);
+padding:9px 14px;
+border-radius:20px;
+font-size:12px
+}
+
+nav{
+display:flex;
+gap:7px;
+padding:12px 5%;
+background:#fff;
+border-bottom:1px solid var(--border);
+position:sticky;
+top:0;
+z-index:5
+}
+
+nav button{
+border:0;
+background:transparent;
+padding:10px 15px;
+border-radius:10px;
+color:var(--muted);
+cursor:pointer;
+font-weight:700
+}
+
+nav button.active,
+nav button:hover{
+background:#edf1ff;
+color:var(--primary)
+}
+
+main{
+max-width:1250px;
+margin:28px auto;
+padding:0 20px
+}
+
+.page{display:none}
+.page.active{display:block}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:16px
+}
+
+.two{grid-template-columns:1.15fr .85fr}
+.three{grid-template-columns:repeat(3,1fr)}
+
+.card{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:18px;
+padding:20px;
+box-shadow:0 5px 18px rgba(30,45,80,.04)
+}
+
+h1{margin:0 0 8px;font-size:30px}
+h2{margin:0 0 14px;font-size:20px}
+h3{margin:0 0 8px;font-size:15px}
+
+.muted{
+color:var(--muted);
+font-size:13px
+}
+
+.metric{
+font-size:30px;
+font-weight:800;
+margin:8px 0
+}
+
+.small{
+font-size:12px;
+color:var(--muted)
+}
+
+.score{
+width:170px;
+height:170px;
+border-radius:50%;
+display:grid;
+place-items:center;
+margin:12px auto;
+background:conic-gradient(
+var(--primary) calc(var(--score)*1%),
+#e9edf5 0
+)
+}
+
+.score:after{
+content:"";
+width:130px;
+height:130px;
+background:#fff;
+border-radius:50%;
+position:absolute
+}
+
+.score>div{
+position:relative;
+z-index:1;
+text-align:center
+}
+
+.score b{
+font-size:38px;
+display:block
+}
+
+.score span{
+font-size:12px;
+color:var(--muted)
+}
+
+.progress{
+height:9px;
+background:#edf0f5;
+border-radius:9px;
+overflow:hidden
+}
+
+.progress i{
+display:block;
+height:100%;
+background:var(--primary);
+border-radius:9px
+}
+
+label{
+display:block;
+font-weight:700;
+font-size:13px;
+margin:12px 0 6px
+}
+
+input,select{
+width:100%;
+padding:11px 12px;
+border:1px solid var(--border);
+border-radius:10px;
+font-size:14px;
+outline:none
+}
+
+input:focus,select:focus{
+border-color:var(--primary)
+}
+
+button.primary{
+background:var(--primary);
+color:#fff;
+border:0;
+border-radius:10px;
+padding:12px 18px;
+font-weight:800;
+cursor:pointer
+}
+
+button.secondary{
+background:#eef2ff;
+color:var(--primary);
+border:0;
+border-radius:10px;
+padding:11px 15px;
+font-weight:700;
+cursor:pointer
+}
+
+.row{
+display:flex;
+gap:12px;
+align-items:center;
+flex-wrap:wrap
+}
+
+.space{justify-content:space-between}
+
+.factor{margin:15px 0}
+.factor .row{margin-bottom:7px}
+
+.alert{
+padding:13px;
+border-radius:12px;
+background:#fff7e9;
+border:1px solid #f6d49e;
+color:#81520e;
+margin-top:14px
+}
+
+.good{
+background:#eaf9f4;
+border-color:#b8e8d8;
+color:#126d58
+}
+
+.danger{
+background:#fff0f2;
+border-color:#f4c1ca;
+color:#8f2638
+}
+
+.pill{
+display:inline-block;
+padding:5px 9px;
+border-radius:20px;
+background:#edf1ff;
+color:var(--primary);
+font-size:11px;
+font-weight:800
+}
+
+.task{
+display:flex;
+align-items:center;
+gap:12px;
+padding:13px 0;
+border-bottom:1px solid var(--border)
+}
+
+.task input{width:auto}
+
+.done{
+text-decoration:line-through;
+color:#8a93a3
+}
+
+.hero{margin-bottom:18px}
+
+.hero p{
+color:var(--muted);
+max-width:750px;
+line-height:1.6
+}
+
+.bar{
+display:flex;
+align-items:end;
+height:180px;
+gap:14px;
+padding:15px 5px
+}
+
+.bar div{
+flex:1;
+background:linear-gradient(180deg,#6d5dfc,#3157d5);
+border-radius:7px 7px 0 0;
+position:relative;
+min-width:20px
+}
+
+.bar span{
+position:absolute;
+top:-22px;
+left:50%;
+transform:translateX(-50%);
+font-size:11px
+}
+
+.labels{
+display:flex;
+gap:14px
+}
+
+.labels span{
+flex:1;
+text-align:center;
+font-size:11px;
+color:var(--muted)
+}
+
+.modal{
+position:fixed;
+inset:0;
+background:rgba(10,18,35,.55);
+display:none;
+place-items:center;
+padding:20px;
+z-index:10
+}
+
+.modal.show{display:grid}
+
+.modal .card{
+max-width:600px;
+width:100%
+}
+
+footer{
+text-align:center;
+padding:30px;
+color:var(--muted);
+font-size:12px
+}
+
+@media(max-width:850px){
+.grid,.two,.three{
+grid-template-columns:1fr 1fr
+}
+
+.grid .wide{
+grid-column:1/-1
+}
+}
+
+@media(max-width:560px){
+.grid,.two,.three{
+grid-template-columns:1fr
+}
+
+header{
+align-items:flex-start;
+flex-direction:column
+}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="brand">
+FinResilient AI
+<span>Financial Habits & Behavioural Resilience Assistant</span>
+</div>
+
+<div class="badge">
+TRACK D • WORKING PROTOTYPE
+</div>
+</header>
+
+<nav>
+<button class="active" onclick="showPage('dashboard',this)">
+Dashboard
+</button>
+
+<button onclick="showPage('profile',this)">
+My Finance
+</button>
+
+<button onclick="showPage('checkin',this)">
+Behaviour Check-in
+</button>
+
+<button onclick="showPage('stress',this)">
+Stress Test
+</button>
+
+<button onclick="showPage('habits',this)">
+Habit Coach
+</button>
+</nav>
+
+<main>
+
+<!-- DASHBOARD -->
+
+<section id="dashboard" class="page active">
+
+<div class="hero">
+
+<h1>Your Financial Resilience</h1>
+
+<p>
+Understand your financial habits, detect stress points early,
+and build small behaviours that improve resilience.
+This prototype provides decision-support, not securities recommendations.
+</p>
+
+</div>
+
+<div class="grid">
+
+<div class="card">
+
+<div class="small">
+RESILIENCE SCORE
+</div>
+
+<div class="metric" id="dashScore">
+--
+</div>
+
+<div class="progress">
+<i id="dashBar" style="width:0%"></i>
+</div>
+
+<p class="small" id="scoreLabel">
+Complete your profile to calculate.
+</p>
+
+</div>
+
+<div class="card">
+
+<div class="small">
+EMERGENCY BUFFER
+</div>
+
+<div class="metric" id="bufferMetric">
+--
+</div>
+
+<div class="small">
+months of essential expenses
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="small">
+SAVINGS RATE
+</div>
+
+<div class="metric" id="saveMetric">
+--
+</div>
+
+<div class="small">
+monthly income saved
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="small">
+HABIT STREAK
+</div>
+
+<div class="metric" id="streakMetric">
+0 days
+</div>
+
+<div class="small">
+consistent actions
+</div>
+
+</div>
+
+</div>
+
+<br>
+
+<div class="grid two">
+
+<div class="card">
+
+<h2>Behaviour factors</h2>
+
+<div id="factors"></div>
+
+<div id="insight" class="alert">
+Enter your financial information and complete a check-in
+to unlock your personalized insight.
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>Monthly spending snapshot</h2>
+
+<div class="bar" id="bars"></div>
+
+<div class="labels">
+
+<span>Needs</span>
+<span>Goals</span>
+<span>Flexible</span>
+<span>Other</span>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- PROFILE -->
+
+<section id="profile" class="page">
+
+<div class="hero">
+
+<h1>My Finance</h1>
+
+<p>
+Use approximate monthly numbers.
+The prototype stores data only in this browser.
+</p>
+
+</div>
+
+<div class="grid two">
+
+<div class="card">
+
+<h2>Financial profile</h2>
+
+<label>Monthly income (₹)</label>
+<input id="income" type="number" value="50000">
+
+<label>Essential expenses (₹)</label>
+<input id="essential" type="number" value="25000">
+
+<label>Flexible/discretionary expenses (₹)</label>
+<input id="flexible" type="number" value="10000">
+
+<label>Emergency savings (₹)</label>
+<input id="emergency" type="number" value="90000">
+
+<label>Monthly investment/saving (₹)</label>
+<input id="saving" type="number" value="10000">
+
+<label>Largest investment category</label>
+
+<select id="concentration">
+
+<option value="20">
+Under 30%
+</option>
+
+<option value="35">
+30–50%
+</option>
+
+<option value="60">
+50–70%
+</option>
+
+<option value="80">
+Above 70%
+</option>
+
+</select>
+
+<br><br>
+
+<button class="primary" onclick="saveProfile()">
+Analyze My Resilience
+</button>
+
+</div>
+
+
+<div class="card">
+
+<div class="score" id="scoreCircle" style="--score:0">
+
+<div>
+
+<b id="circleNum">--</b>
+
+<span>/ 100</span>
+
+</div>
+
+</div>
+
+<h2 style="text-align:center">
+Current resilience
+</h2>
+
+<p class="muted" style="text-align:center">
+A higher score here means stronger measured financial
+buffers and habits within this prototype.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- CHECK-IN -->
+
+<section id="checkin" class="page">
+
+<div class="hero">
+
+<h1>Behaviour Check-in</h1>
+
+<p>
+Five quick questions help the prototype understand
+recent decision-making patterns.
+</p>
+
+</div>
+
+<div class="card">
+
+<div class="grid two">
+
+<div>
+
+<label>
+1. How often did you make an unplanned purchase this week?
+</label>
+
+<select id="q1">
+
+<option value="0">
+Rarely
+</option>
+
+<option value="1">
+Once
+</option>
+
+<option value="2">
+Several times
+</option>
+
+</select>
+
+</div>
+
+
+<div>
+
+<label>
+2. How strongly did market/social-media FOMO affect you?
+</label>
+
+<select id="q2">
+
+<option value="0">
+Not at all
+</option>
+
+<option value="1">
+A little
+</option>
+
+<option value="2">
+Strongly
+</option>
+
+</select>
+
+</div>
+
+
+<div>
+
+<label>
+3. When a financial decision goes wrong, I tend to...
+</label>
+
+<select id="q3">
+
+<option value="0">
+Review calmly
+</option>
+
+<option value="1">
+Worry briefly
+</option>
+
+<option value="2">
+React immediately
+</option>
+
+</select>
+
+</div>
+
+
+<div>
+
+<label>
+4. How confident are you about following your monthly plan?
+</label>
+
+<select id="q4">
+
+<option value="2">
+Very confident
+</option>
+
+<option value="1">
+Somewhat confident
+</option>
+
+<option value="0">
+Not confident
+</option>
+
+</select>
+
+</div>
+
+
+<div>
+
+<label>
+5. How often do you review your spending?
+</label>
+
+<select id="q5">
+
+<option value="2">
+Weekly
+</option>
+
+<option value="1">
+Monthly
+</option>
+
+<option value="0">
+Rarely
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+<br>
+
+<button class="primary" onclick="runCheckin()">
+Analyze Behaviour
+</button>
+
+<div id="checkinResult"></div>
+
+</div>
+
+</section>
+
+
+<!-- STRESS TEST -->
+
+<section id="stress" class="page">
+
+<div class="hero">
+
+<h1>Financial Stress Test</h1>
+
+<p>
+Explore hypothetical shocks.
+This is an educational simulation and does not predict
+future income or markets.
+</p>
+
+</div>
+
+<div class="grid two">
+
+<div class="card">
+
+<h2>Scenario</h2>
+
+<label>Income change</label>
+
+<input
+id="incomeShock"
+type="range"
+min="-50"
+max="20"
+value="-20"
+oninput="document.getElementById('shockVal').textContent=this.value+'%'"
+>
+
+<p>
+<b id="shockVal">-20%</b>
+</p>
+
+<label>
+Unexpected expense (₹)
+</label>
+
+<input id="unexpected" type="number" value="30000">
+
+<button class="primary" onclick="stressTest()">
+Run Stress Test
+</button>
+
+</div>
+
+
+<div class="card">
+
+<h2>Scenario result</h2>
+
+<div id="stressResult">
+
+<p class="muted">
+Choose a scenario and run the simulation.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- HABITS -->
+
+<section id="habits" class="page">
+
+<div class="hero">
+
+<h1>Habit Coach</h1>
+
+<p>
+Turn insights into small actions.
+Tick completed habits to build your local prototype streak.
+</p>
+
+</div>
+
+<div class="grid two">
+
+<div class="card">
+
+<h2>7-day action plan</h2>
+
+<div id="tasks"></div>
+
+</div>
+
+
+<div class="card">
+
+<h2>AI-style coach message</h2>
+
+<div id="coach" class="alert good">
+
+Complete the profile and behaviour check-in
+for a personalized coaching message.
+
+</div>
+
+<br>
+
+<button class="secondary" onclick="generateCoach()">
+Generate Coach Nudge
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+
+<div class="modal" id="modal">
+
+<div class="card">
+
+<h2>Prototype note</h2>
+
+<p>
+This demo uses synthetic/user-entered data and a transparent
+scoring engine. A production system would connect to
+consent-based financial data services and a secured backend.
+</p>
+
+<button class="primary" onclick="closeModal()">
+Continue
+</button>
+
+</div>
+
+</div>
+
+
+<footer>
+FinResilient AI • Track D Prototype • Human-in-the-loop financial decision support
+</footer>
+
+
+<script>
+
+const state={
+profile:{},
+behaviour:{},
+score:0,
+tasks:[false,false,false,false,false,false,false]
+};
+
+
+function $(id){
+return document.getElementById(id);
+}
+
+
+function load(){
+
+const s=JSON.parse(
+localStorage.getItem('finresilient')||'null'
+);
+
+if(s){
+
+Object.assign(state,s);
+
+fillProfile();
+
+updateDashboard();
+
+}
+
+renderTasks();
+
+if(!localStorage.getItem('welcomeSeen')){
+
+$('modal').classList.add('show');
+
+localStorage.setItem('welcomeSeen','1');
+
+}
+
+}
+
+
+function fillProfile(){
+
+[
+'income',
+'essential',
+'flexible',
+'emergency',
+'saving',
+'concentration'
+].forEach(k=>{
+
+if(state.profile[k]!==undefined)
+$(k).value=state.profile[k];
+
+});
+
+}
+
+
+function saveProfile(){
+
+state.profile={
+
+income:+$('income').value||0,
+
+essential:+$('essential').value||0,
+
+flexible:+$('flexible').value||0,
+
+emergency:+$('emergency').value||0,
+
+saving:+$('saving').value||0,
+
+concentration:+$('concentration').value
+
+};
+
+calculate();
+
+persist();
+
+updateDashboard();
+
+$('circleNum').textContent=state.score;
+
+$('scoreCircle').style.setProperty(
+'--score',
+state.score
+);
+
+alert(
+"Analysis complete. Your resilience score is "+
+state.score+
+"/100."
+);
+
+}
+
+
+function calculate(){
+
+let p=state.profile;
+
+let income=p.income||1;
+
+let buffer=
+p.emergency/
+Math.max(p.essential,1);
+
+let savings=
+(p.saving/income)*100;
+
+let bufferScore=
+Math.min(buffer/6,1)*30;
+
+let savingScore=
+Math.min(savings/20,1)*25;
+
+let expenseScore=
+Math.max(
+0,
+1-(p.flexible/income)
+)*20;
+
+let concentrationScore=
+Math.max(
+0,
+1-p.concentration/100
+)*15;
+
+let behaviourScore=10;
+
+if(state.behaviour.q1!==undefined){
+
+const b=state.behaviour;
+
+behaviourScore=
+Math.min(
+10,
+(
+(2-b.q1)+
+(2-b.q2)+
+(2-b.q3)+
+b.q4+
+b.q5
+)/10*10
+);
+
+}
+
+state.score=Math.round(
+bufferScore+
+savingScore+
+expenseScore+
+concentrationScore+
+behaviourScore
+);
+
+}
+
+
+function updateDashboard(){
+
+if(!state.profile.income)
+return;
+
+calculate();
+
+let p=state.profile;
+
+let buffer=
+p.emergency/
+Math.max(p.essential,1);
+
+let save=
+(p.saving/p.income)*100;
+
+$('dashScore').textContent=
+state.score+'/100';
+
+$('dashBar').style.width=
+state.score+'%';
+
+$('scoreLabel').textContent=
+state.score>=75
+?'Strong measured resilience'
+:
+state.score>=50
+?'Building resilience'
+:
+'Needs attention on key buffers';
+
+$('bufferMetric').textContent=
+buffer.toFixed(1);
+
+$('saveMetric').textContent=
+save.toFixed(0)+'%';
+
+$('circleNum').textContent=
+state.score;
+
+$('scoreCircle').style.setProperty(
+'--score',
+state.score
+);
+
+
+const f=[
+
+[
+'Emergency buffer',
+Math.min(100,buffer/6*100)
+],
+
+[
+'Savings discipline',
+Math.min(100,save/20*100)
+],
+
+[
+'Spending stability',
+Math.max(
+0,
+(1-p.flexible/p.income)*100
+)
+],
+
+[
+'Concentration awareness',
+Math.max(
+0,
+100-p.concentration
+)
+]
+
+];
+
+
+$('factors').innerHTML=
+
+f.map(x=>`
+
+<div class="factor">
+
+<div class="row space">
+
+<span>${x[0]}</span>
+
+<b>${Math.round(x[1])}%</b>
+
+</div>
+
+<div class="progress">
+
+<i style="width:${Math.round(x[1])}%"></i>
+
+</div>
+
+</div>
+
+`).join('');
+
+
+let issue=
+f.sort((a,b)=>a[1]-b[1])[0];
+
+$('insight').innerHTML=`
+
+<b>Top focus: ${issue[0]}</b>
+
+<br>
+
+Your lowest measured factor is
+${Math.round(issue[1])}%.
+Consider one small improvement this week
+instead of trying to change everything at once.
+
+`;
+
+
+$('bars').innerHTML=
+
+[
+p.essential,
+p.saving,
+p.flexible,
+Math.max(
+0,
+p.income-
+p.essential-
+p.saving-
+p.flexible
+)
+
+]
+
+.map(v=>`
+
+<div
+style="
+height:${Math.max(
+10,
+Math.min(100,v/p.income*100)
+)}%"
+>
+
+<span>
+₹${Math.round(v/1000)}k
+</span>
+
+</div>
+
+`).join('');
+
+}
+
+
+function runCheckin(){
+
+state.behaviour={
+
+q1:+$('q1').value,
+
+q2:+$('q2').value,
+
+q3:+$('q3').value,
+
+q4:+$('q4').value,
+
+q5:+$('q5').value
+
+};
+
+calculate();
+
+persist();
+
+updateDashboard();
+
+let risk=
+state.behaviour.q1+
+state.behaviour.q2+
+state.behaviour.q3;
+
+
+$('checkinResult').innerHTML=`
+
+<div class="alert ${
+risk>=4?'danger':'good'
+}">
+
+<b>
+${
+risk>=4
+?'Behavioural stress signal detected'
+:'Positive behavioural pattern'
+}
+</b>
+
+<br>
+
+${
+risk>=4
+?
+'You may benefit from a pause-and-review rule before unplanned financial decisions.'
+:
+'Your answers show useful planning and review habits. Keep them consistent.'
+}
+
+</div>
+
+`;
+
+}
+
+
+function stressTest(){
+
+let p=state.profile;
+
+if(!p.income){
+
+alert(
+'Please complete My Finance first.'
+);
+
+return;
+
+}
+
+let shock=
++$('incomeShock').value/100;
+
+let unexpected=
++$('unexpected').value||0;
+
+let newIncome=
+p.income*(1+shock);
+
+let monthlyGap=
+newIncome-
+p.essential-
+p.flexible;
+
+let remaining=
+p.emergency-
+unexpected;
+
+let months=
+remaining/
+Math.max(
+1,
+p.essential+
+Math.max(0,-monthlyGap)
+);
+
+
+$('stressResult').innerHTML=`
+
+<div class="metric">
+
+${months.toFixed(1)} months
+
+</div>
+
+<p class="muted">
+
+Approximate emergency-buffer coverage after
+the hypothetical expense and income change.
+
+</p>
+
+<div class="alert ${
+months<3?'danger':'good'
+}">
+
+<b>
+
+${
+months<3
+?'Buffer needs attention'
+:'Buffer remains comparatively strong'
+}
+
+</b>
+
+<br>
+
+Scenario income:
+₹${Math.round(newIncome).toLocaleString('en-IN')}
+
+•
+
+Estimated remaining emergency savings:
+₹${Math.max(
+0,
+remaining
+).toLocaleString('en-IN')}
+
+</div>
+
+`;
+
+}
+
+
+function renderTasks(){
+
+let names=[
+
+'Review spending for 10 minutes',
+
+'Avoid one impulse purchase',
+
+'Move planned savings first',
+
+'Write down one financial goal',
+
+'Take a 24-hour pause before a major decision',
+
+'Check emergency-buffer progress',
+
+'Complete weekly behaviour review'
+
+];
+
+
+$('tasks').innerHTML=
+
+names.map((n,i)=>`
+
+<div class="task">
+
+<input
+type="checkbox"
+${state.tasks[i]?'checked':''}
+onchange="toggleTask(${i},this.checked)"
+>
+
+<span class="${
+state.tasks[i]?'done':''
+}">
+
+${n}
+
+</span>
+
+</div>
+
+`).join('');
+
+}
+
+
+function toggleTask(i,v){
+
+state.tasks[i]=v;
+
+persist();
+
+renderTasks();
+
+$('streakMetric').textContent=
+state.tasks.filter(Boolean).length+
+' days';
+
+}
+
+
+function generateCoach(){
+
+if(!state.profile.income){
+
+$('coach').innerHTML=
+'Start with your financial profile so the coach can identify the highest-impact habit.';
+
+return;
+
+}
+
+let p=state.profile;
+
+let buffer=
+p.emergency/
+Math.max(1,p.essential);
+
+let save=
+p.saving/p.income*100;
+
+let msg=
+
+buffer<3
+?
+'Your emergency buffer is the first area to strengthen. Try a small, automatic contribution each month.'
+:
+save<10
+?
+'Your savings rate is an opportunity area. Set a realistic target and track it weekly.'
+:
+'Your measured buffers are progressing. Focus on consistency and avoid decisions driven by short-term emotion.';
+
+
+$('coach').innerHTML=
+
+'<b>Coach nudge</b><br>'+
+msg+
+' <br><br>'+
+'<span class="small">'+
+'Why: this recommendation is generated from your entered numbers and is not a product or investment recommendation.'+
+'</span>';
+
+}
+
+
+function persist(){
+
+localStorage.setItem(
+'finresilient',
+JSON.stringify(state)
+);
+
+}
+
+
+function showPage(id,btn){
+
+document
+.querySelectorAll('.page')
+.forEach(x=>x.classList.remove('active'));
+
+$(id).classList.add('active');
+
+document
+.querySelectorAll('nav button')
+.forEach(x=>x.classList.remove('active'));
+
+btn.classList.add('active');
+
+if(id==='dashboard')
+updateDashboard();
+
+}
+
+
+function closeModal(){
+
+$('modal').classList.remove('show');
+
+}
+
+
+load();
+
+updateDashboard();
+
+$('streakMetric').textContent=
+state.tasks.filter(Boolean).length+
+' days';
+
+</script>
+
+</body>
+  </html>
